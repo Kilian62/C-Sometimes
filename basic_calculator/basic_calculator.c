@@ -2,36 +2,43 @@
 #include <stdio.h>
 
 int calc(char *nbr, int taille){
+
     char *num   = malloc(taille * sizeof(char));
+     if (num == NULL) {
+        printf("Erreur d'allocation mémoire\n");
+        return -1;
+    }
+
     int n       = 0;
     int number1 = 0;
     int number2 = 0;
     int res     = 0;
     char op;
-
-    //printf("You entered: %s\n", nbr);
-
+    // Parse the input string to extract numbers and operator
     for (int i = 0; nbr[i] != '\0'; i++){
-
-        if (nbr[i] != '+' && nbr[i] != '-' && nbr[i] != '/' ){
+        // if first character is an operator
+        if (n == 0 && (nbr[i] == '+' || nbr[i] == '-' || nbr[i] == '/' || nbr[i] == '*')){
+            num[n] = nbr[i];
+            n++;
+        }
+        // if the character is not an operator
+        else if (nbr[i] != '+' && nbr[i] != '-' && nbr[i] != '/' && nbr[i] != '*'){
             num[n] = nbr[i];
             n++;
             num[n] = '\0';
         }
+        
         else{
+            // if it is an operator
             number1 = atoi(num);
             op = nbr[i];
-            //printf("Operator is: %c\n", op);
-
-            n =0;
+            n =0 ;
             num[n] = '\0';
         }
         
     }
     number2 = atoi(num);
-    /*printf("Number is: %d\n", number1);
-    printf("Second number is: %d\n", number2);*/
-
+        // Perform calculation based on the operator
     switch (op){
         case '+':
             res = number1 + number2;
@@ -46,7 +53,11 @@ int calc(char *nbr, int taille){
             }
             res = number1 / number2;
             break;
+        case '*':
+            res = number1 * number2;
+            break;
         default:
+        // in case the operator is unknown
             printf("Error: Unknown operator %c\n", op);
             break;
     }
