@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 
 int calc(char *nbr, int taille){
 
@@ -16,24 +17,35 @@ int calc(char *nbr, int taille){
     char op;
     // Parse the input string to extract numbers and operator
     for (int i = 0; nbr[i] != '\0'; i++){
-        // if first character is an operator
-        if (n == 0 && (nbr[i] == '+' || nbr[i] == '-' || nbr[i] == '/' || nbr[i] == '*')){
-            num[n] = nbr[i];
-            n++;
+        if (!isdigit(nbr[i]) && nbr[i] != '+' && nbr[i] != '-' && nbr[i] != '/' && nbr[i] != '*')
+{
+            // if the character is not numeric or an operator
+            printf("Error: Invalid character %c\n", nbr[i]);
+            free(num);
+            return -1;
+         
+
         }
-        // if the character is not an operator
-        else if (nbr[i] != '+' && nbr[i] != '-' && nbr[i] != '/' && nbr[i] != '*'){
-            num[n] = nbr[i];
-            n++;
-            num[n] = '\0';
-        }
-        
         else{
-            // if it is an operator
-            number1 = atoi(num);
-            op = nbr[i];
-            n =0 ;
-            num[n] = '\0';
+            // if first character is an operator
+            if (n == 0 && (nbr[i] == '+' || nbr[i] == '-' || nbr[i] == '/' || nbr[i] == '*')){
+                num[n] = nbr[i];
+                n++;
+            }
+            // if the character is not an operator
+            else if (nbr[i] != '+' && nbr[i] != '-' && nbr[i] != '/' && nbr[i] != '*'){
+                num[n] = nbr[i];
+                n++;
+                num[n] = '\0';
+            }
+            
+            else{
+                // if it is an operator
+                number1 = atoi(num);
+                op = nbr[i];
+                n =0 ;
+                num[n] = '\0';
+            }
         }
         
     }
@@ -71,7 +83,9 @@ int main(){
     printf("\nEnter your number baby girl : ");
     char *nbr = malloc(taille * sizeof(char));
     scanf("%s", nbr);
-   printf("Result is: %d\n", calc(nbr,taille));
+    int result = calc(nbr,taille);
+    if (result != -1){printf("Result is: %d \n", result);}
+    else{printf("Buddy thought it was error.com\n");}
     free(nbr);
     return 0;
 
